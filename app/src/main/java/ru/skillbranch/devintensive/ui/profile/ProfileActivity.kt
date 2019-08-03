@@ -5,7 +5,10 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -14,9 +17,10 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.ui.custom.CircleImageView
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity(), TextWatcher {
 
     companion object {
         const val IS_EDIT_MODE = "IS_EDIT_MODE"
@@ -32,6 +36,7 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         initViews(savedInstanceState)
         initViewModel()
+        updateAvatar()
         Log.d("M_MainActivity", "onCreate")
     }
 
@@ -68,17 +73,17 @@ class ProfileActivity : AppCompatActivity() {
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileDate().observe(this, Observer { updateUI(it) })
-        viewModel.hetTheme().observe(this, Observer { updateTheme(it) })
+        viewModel.setTheme().observe(this, Observer { updateTheme(it) })
     }
 
     private fun updateTheme(mode: Int) {
-        Log.d("M_ProfileActivity","updateTheme")
+        Log.d("M_ProfileActivity", "updateTheme")
         delegate.setLocalNightMode(mode)
     }
 
     private fun updateUI(profile: Profile) {
         profile.toMap().also {
-            for ((k,v) in viewFields) {
+            for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
         }
@@ -100,13 +105,35 @@ class ProfileActivity : AppCompatActivity() {
         showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener {
-            if (isEditMode) saveProfileInfo()
+            if (isEditMode) {
+                saveProfileInfo()
+                updateAvatar()
+            }
             isEditMode = !isEditMode
             showCurrentMode(isEditMode)
         }
 
         btn_switch_theme.setOnClickListener {
             viewModel.switchTheme()
+        }
+
+        et_repository.addTextChangedListener(this)
+    }
+
+    private fun updateAvatar() {
+        if (viewModel.getProfileDate().value?.firstName.isNullOrEmpty() &&
+            viewModel.getProfileDate().value?.lastName.isNullOrEmpty()
+        ) {
+            iv_avatar.setImageDrawable(resources.getDrawable(R.drawable.ic_avatar, theme))
+        } else {
+            val typedValue = TypedValue()
+            theme.resolveAttribute(R.attr.ivDefaultAvatarColor, typedValue, true)
+            iv_avatar.setImageDrawable(
+                CircleImageView.InitialsDrawable(
+                    typedValue.data,
+                    viewModel.getInitials()
+                )
+            )
         }
     }
 
@@ -151,13 +178,27 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun saveProfileInfo() {
         Profile(
-                    firstName = et_first_name.text.toString(),
-                    lastName = et_last_name.text.toString(),
-                    about = et_about.text.toString(),
-                    repository = et_repository.text.toString()
+            firstName = et_first_name.text.toString(),
+            lastName = et_last_name.text.toString(),
+            about = et_about.text.toString(),
+            repository = if (wr_repository.error == null) et_repository.text.toString() else ""
         ).apply {
             viewModel.saveProfileData(this)
         }
-
     }
+
+    override fun afterTextChanged(s: Editable?) {
+        if (!viewModel.validateRepo(
+                et_repository.text.toString(),
+                et_first_name.text.toString(),
+                et_last_name.text.toString()
+            )
+        )
+            wr_repository.error = resources.getString(R.string.profile_repo_validation_error)
+        else wr_repository.error = null
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 }

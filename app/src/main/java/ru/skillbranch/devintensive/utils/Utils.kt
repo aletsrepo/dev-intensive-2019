@@ -1,5 +1,7 @@
 package ru.skillbranch.devintensive.utils
 
+import android.content.res.Resources
+
 object Utils {
 
     private val transliterationMap = mapOf(
@@ -8,7 +10,7 @@ object Utils {
         'й' to "i", 'к' to "k", 'л' to "l", 'м' to "m", 'н' to "n",
         'о' to "o", 'п' to "p", 'р' to "r", 'с' to "s", 'т' to "t",
         'у' to "u", 'ф' to "f", 'х' to "h", 'ц' to "c", 'ч' to "ch",
-        'ш' to "sh", 'щ' to "sh'",'ъ' to "", 'ы' to "i", 'ь' to "",
+        'ш' to "sh", 'щ' to "sh'", 'ъ' to "", 'ы' to "i", 'ь' to "",
         'э' to "e", 'ю' to "yu", 'я' to "ya"
     )
 
@@ -29,6 +31,7 @@ object Utils {
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
+        if (payload.isEmpty()) return ""
         var result = ""
         val words = payload.trim().split(" ")
         for ((count, word) in words.withIndex()) {

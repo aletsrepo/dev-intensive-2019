@@ -35,11 +35,11 @@
                 android:background="@drawable/btn_round_bg"
                 android:src="@drawable/ic_switch_day_night" />
 
-            <ImageView
+            <ru.skillbranch.devintensive.ui.custom.CircleImageView
                 android:id="@+id/iv_avatar"
                 android:layout_width="@dimen/avatar_round_size"
                 android:layout_height="@dimen/avatar_round_size"
-                android:src="@drawable/avatar_default"
+                android:src="@drawable/ic_avatar"
                 android:layout_centerHorizontal="true"/>
 
             <ImageButton
@@ -219,7 +219,6 @@
         android:background="?attr/colorDivider"/>
 
     <LinearLayout
-        android:id="@+id/wr_repository"
         style="@style/Profile.InfoItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -231,6 +230,7 @@
             android:src="@drawable/ic_about" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/wr_repository"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_normal_16"

@@ -1,9 +1,8 @@
 package ru.skillbranch.devintensive.repositories
 
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
-import android.provider.Settings.Global.putString
 import androidx.appcompat.app.AppCompatDelegate
+import android.preference.PreferenceManager
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.models.Profile
 
@@ -29,7 +28,7 @@ object PreferencesRepository {
 
     fun getAppTheme(): Int = prefs.getInt(APP_THEME, AppCompatDelegate.MODE_NIGHT_NO)
 
-    fun getProfileData(): Profile? {
+    fun getProfile(): Profile {
         return Profile(
             prefs.getString(FIRST_NAME, "")!!,
             prefs.getString(LAST_NAME, "")!!,

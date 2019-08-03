@@ -4,8 +4,16 @@
         <attr name="aspectRatio" format="float"/>
     </declare-styleable>
 
+    <attr name="ivDefaultAvatarColor" format="color"/>
     <attr name="colorAccentedSurface" format="reference"/>
     <attr name="colorDivider" format="reference"/>
     <attr name="colorIcon" format="reference"/>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="cv_borderColor" format="color"/>
+        <attr name="cv_borderWidth" format="dimension"/>
+        <attr name="highlightEnable" format="boolean"/>
+        <attr name="highlightColor" format="color"/>
+    </declare-styleable>
 
 </resources>

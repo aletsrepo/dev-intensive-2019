@@ -11,6 +11,8 @@
         <item name="colorAccentedSurface">@color/color_primary_light</item>
         <item name="colorIcon">@color/color_gray</item>
         <item name="colorDivider">@color/color_divider_dark</item>
+
+        <item name="ivDefaultAvatarColor">@color/color_accent</item>
     </style>
 
     <!-- Splash -->
