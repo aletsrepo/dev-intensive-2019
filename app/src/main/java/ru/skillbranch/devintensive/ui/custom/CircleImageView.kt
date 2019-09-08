@@ -16,6 +16,7 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 import android.graphics.Paint.Align
+import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatImageView
 
 class CircleImageView @JvmOverloads constructor(context: Context, @Nullable attrs: AttributeSet? = null) :
@@ -119,7 +120,18 @@ class CircleImageView @JvmOverloads constructor(context: Context, @Nullable attr
         mHighlightEnable = highlightEnable
         mInitialized = true
 
-        setupBitmap()
+        setInitials("??")
+    }
+
+    fun setInitials(initials: String) {
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(R.attr.ivDefaultAvatarColor, typedValue, true)
+        setImageDrawable(
+            InitialsDrawable(
+                typedValue.data,
+                initials
+            )
+        )
     }
 
     override fun setImageResource(@DrawableRes resId: Int) {

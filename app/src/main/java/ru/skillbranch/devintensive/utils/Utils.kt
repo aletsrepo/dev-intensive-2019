@@ -1,7 +1,5 @@
 package ru.skillbranch.devintensive.utils
 
-import android.content.res.Resources
-
 object Utils {
 
     private val transliterationMap = mapOf(

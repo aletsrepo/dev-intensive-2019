@@ -126,14 +126,7 @@ class ProfileActivity : AppCompatActivity(), TextWatcher {
         ) {
             iv_avatar.setImageDrawable(resources.getDrawable(R.drawable.ic_avatar, theme))
         } else {
-            val typedValue = TypedValue()
-            theme.resolveAttribute(R.attr.ivDefaultAvatarColor, typedValue, true)
-            iv_avatar.setImageDrawable(
-                CircleImageView.InitialsDrawable(
-                    typedValue.data,
-                    viewModel.getInitials()
-                )
-            )
+            iv_avatar.setInitials(viewModel.getInitials())
         }
     }
 
